@@ -20,6 +20,7 @@ return new class extends Migration
             $table->text('poc')->nullable();
             $table->text('step_for_reduce')->nullable();
             $table->text('report')->nullable();
+            $table->integer('count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

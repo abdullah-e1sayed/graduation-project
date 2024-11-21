@@ -28,6 +28,7 @@ class DataImport implements ToCollection
                     'poc' => $row[3],
                     'step_for_reduce' => $row[4],
                     'report' => $row[5],
+                    'count' => $row[6],
                 ]
             );
         }
