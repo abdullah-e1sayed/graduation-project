@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('title');
             $table->enum('type',['critical','high','medium','low'])->nuulable();
             $table->text('poc')->nullable();
+            $table->text('step_for_reduce')->nullable();
+            $table->text('report')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\HelpMessageController;
 use App\Http\Controllers\Api\NoteController;
 use App\Http\Controllers\Api\VulnerabilityController;
 use App\Http\Controllers\Api\IndicatorController;
+use App\Http\Controllers\Api\ExcelImportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,6 +70,7 @@ Route::apiResource('vulnerability', VulnerabilityController::class)->middleware(
     // Indicator routes
 Route::apiResource('indicator', IndicatorController::class)->middleware('auth:sanctum');
  
+Route::post('/vulnerability/import', [ExcelImportController::class, 'import'])->name('import')->middleware('auth:sanctum');
 
 
 

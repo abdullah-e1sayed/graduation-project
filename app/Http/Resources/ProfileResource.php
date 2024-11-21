@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Models\Admin;
 
 class ProfileResource extends JsonResource
 {
@@ -23,7 +24,8 @@ class ProfileResource extends JsonResource
             'birth day'=>$this->profile->birthday,
             'gender'=>$this->profile->gender,
             'country'=>$this->profile->country,
-            'locale'=>$this->profile->locale,             
+            'locale'=>$this->profile->locale, 
+            'is admin'=>(Admin::where('email','=',$this->email)->first())?'true':'false',            
         ];
     }
 }
