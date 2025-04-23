@@ -2,13 +2,21 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\AccessTokensController;
-use App\Http\Controllers\Api\ProfileController;
-use App\Http\Controllers\Api\HelpMessageController;
 use App\Http\Controllers\Api\NoteController;
-use App\Http\Controllers\Api\VulnerabilityController;
+use App\Http\Controllers\Chat\ApiController;
+use App\Http\Controllers\Chat\ChatController;
+use App\Http\Controllers\Chat\RageController;
+use App\Http\Controllers\Chat\TokenController;
+use App\Http\Controllers\Api\MindMapController;
+use App\Http\Controllers\Api\ProfileController;
 use App\Http\Controllers\Api\IndicatorController;
 use App\Http\Controllers\Api\ExcelImportController;
+use App\Http\Controllers\Api\HelpMessageController;
+// use App\Http\Controllers\Chat\MindMapController;
+use App\Http\Controllers\Api\AccessTokensController;
+use App\Http\Controllers\Api\StreamController;
+use App\Http\Controllers\Api\VulnerabilityController;
+use App\Http\Controllers\Chat\CreateReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -69,8 +77,27 @@ Route::apiResource('note', NoteController::class)->middleware('auth:sanctum');
 Route::apiResource('vulnerability', VulnerabilityController::class)->middleware('auth:sanctum');
     // Indicator routes
 Route::apiResource('indicator', IndicatorController::class)->middleware('auth:sanctum');
- 
+
 Route::post('/vulnerability/import', [ExcelImportController::class, 'import'])->name('import')->middleware('auth:sanctum');
 
+Route::get('/chat',[TokenController::class,'streamlitView'])->name('chat')->middleware('auth:sanctum');
+
+Route::post('chat/send-api/',[ApiController::class,'sendApi'])->name('sendApi');
+Route::post('chat/save-chat', [ChatController::class, 'saveChat'])->name('saveChat');
+Route::post('chat/save-mind-map', [MindMapController::class, 'store'])->name('saveMindMap');
+Route::get('chat/view-mind-map/{slug}', [MindMapController::class, 'show'])->name('viewMindMap');
+Route::get('chat/view-chat/{slug}', [ChatController::class, 'show'])->name('viewChat')->middleware('auth:sanctum');
+Route::delete('chat/delete-chat/{slug}', [ChatController::class, 'deleteChat'])->name('deleteChat')->middleware('auth:sanctum');
+Route::get('chat/view-chat', [ChatController::class, 'index'])->name('viewChats')->middleware('auth:sanctum');
+
+Route::post('chat/upload-rage-file',[RageController::class,'uploadFile'])->name('uploadRageFile');
+
+Route::post('chat/rage-content',[RageController::class,'rageContent'])->name('rageContent');
+
+Route::get('/run-script/{bug_name}/{asset}/{step_to_preuce}/{poc}/{severity}', [CreateReportController::class, 'runPythonScript']);
+Route::post('/vulnerability/create-report', [CreateReportController::class, 'runPythonScript'])->middleware('auth:sanctum');
+Route::apiResource('mind-map', MindMapController::class)->middleware('auth:sanctum');
+
+Route::post('test',[StreamController::class,'AgentTOImproveSearchQuery'])->name('AgentTOImproveSearchQuery');
 
 

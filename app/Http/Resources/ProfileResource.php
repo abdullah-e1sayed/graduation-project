@@ -17,8 +17,9 @@ class ProfileResource extends JsonResource
     {
         return [
             'id'=> $this->id,  
-            'fname'=> $this->profile->first_name	,  
-            'lname'=> $this->profile->last_name	,  
+            'name'=>htmlspecialchars($this->name, ENT_COMPAT,'ISO-8859-1', true),
+            'fname'=> htmlspecialchars($this->profile->first_name, ENT_COMPAT,'ISO-8859-1', true)	,  
+            'lname'=> htmlspecialchars($this->profile->last_name, ENT_COMPAT,'ISO-8859-1', true)	,  
             'email'=> $this->email,  
             'phone'=> $this->phone_number,  
             'birth day'=>$this->profile->birthday,

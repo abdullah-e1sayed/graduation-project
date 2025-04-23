@@ -21,7 +21,9 @@ class NoteController extends Controller
      */
     public function index(Request $request)
     {        
-        $notes = Note::Filter($request->query())->paginate(); 
+        $notes = Note::Filter($request->query())
+        ->orderBy('id', 'desc') 
+        ->paginate(); 
         return NoteResource::collection($notes);    
     
     }

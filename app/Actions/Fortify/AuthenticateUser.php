@@ -11,7 +11,7 @@ class AuthenticateUser {
     {
         $username = $request->post( config('fortify.username'));
         $password = $request->post('password');
-        $user = Admin::where('email','=',$username)
+        $user = User::where('email','=',$username)
                     ->orWhere('phone_number','=',$username)                    
                     ->first();
                     if($user && Hash::check($password, $user->password)){

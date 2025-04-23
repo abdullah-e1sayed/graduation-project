@@ -1,4 +1,15 @@
 <?php return array (
+  'cloudstudio/ollama-laravel' => 
+  array (
+    'providers' => 
+    array (
+      0 => 'Cloudstudio\\Ollama\\OllamaServiceProvider',
+    ),
+    'aliases' => 
+    array (
+      'Ollama' => 'Cloudstudio\\Ollama\\Facades\\Ollama',
+    ),
+  ),
   'laravel/fortify' => 
   array (
     'providers' => 

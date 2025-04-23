@@ -11,6 +11,7 @@ use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -66,7 +67,8 @@ class User extends Authenticatable implements MustVerifyEmail
         static::created(function(User $user){
             Profile::create([
                 'user_id'=>$user->id,
-                'first_name'=>$user->name
+                'first_name'=>$user->name,
+                'api_token'=>Str::uuid(), 
             ]);
         });     
     }

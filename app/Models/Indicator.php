@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
 class Indicator extends Model
 {
     use HasFactory,SoftDeletes;
-    protected $fillable = ['id','user_id','vulnerabilities','created_at','updated_at','deleted_at'];
+    protected $fillable = ['id','user_id','vulnerability','severity','site','count','created_at','updated_at','deleted_at'];
     protected static function booted()
     {
         static::addGlobalScope('indicator', new IndicatorScope());

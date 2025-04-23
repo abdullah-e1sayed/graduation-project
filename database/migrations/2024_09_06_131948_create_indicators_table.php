@@ -14,7 +14,10 @@ return new class extends Migration
         Schema::create('indicators', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-            $table->json('vulnerabilities')->nullable();
+            $table->text('vulnerability')->nullable();
+            $table->enum('severity',['critical','high','medium','low'])->nuulable();
+            $table->string('site');
+            $table->integer('count')->default(0);
             $table->timestamps();
             $table->softDeletes();
 

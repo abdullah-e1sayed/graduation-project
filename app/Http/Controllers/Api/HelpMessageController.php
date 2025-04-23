@@ -24,11 +24,16 @@ class HelpMessageController extends Controller
            
         if(Admin::where('email','=',Auth::user()->email)->first()){
             $helpMessages = HelpMessage::Filter($request->query())
-            ->with('user:id,name,email','admin:id,name,email')
-            ->paginate(); 
+                ->with('user:id,name,email','admin:id,name,email')
+                ->orderBy('id', 'desc') 
+                ->paginate(4); 
             return HelpMessageResource::collection($helpMessages);  
         }
-        return Response::json("Bad Request !",400);
+        $helpMessages = HelpMessage::where('answer','!=',null)->Filter($request->query())
+                ->with('user:id,name,email','admin:id,name,email')
+                ->orderBy('id', 'desc') 
+                ->paginate(4); 
+        return HelpMessageResource::collection($helpMessages);
     
     }
 

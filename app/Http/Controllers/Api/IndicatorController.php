@@ -16,7 +16,9 @@ class IndicatorController extends Controller
      */
     public function index(Request $request)
     {
-        $indicators = Indicator::Filter($request->query())->paginate(); 
+        $indicators = Indicator::Filter($request->query())
+        ->orderBy('id', 'desc') 
+        ->paginate(5); 
         return IndicatorResource::collection($indicators);  
     }
 
@@ -25,11 +27,16 @@ class IndicatorController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+        $request ->validate([
+            'vulnerability' => 'string|required|max:255',
+            'severity'=> 'in:critical,high,medium,low',
+            'site'=>'string|required|max:255',
+            'count'=> 'required|numeric|min:0',
+        ]);
+
         $indicator = array_merge([
             'user_id' => $request->user()->id,
-            'vulnerabilities' => $request->vulnerabilities[0],
-        ], [$request->vulnerabilities[0]]);
+        ], $request->all());
         Indicator::create($indicator);
 
         return Response::json(["message"=>"Indicator added successfully ."],201);
@@ -52,7 +59,20 @@ class IndicatorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $indicator=Indicator::findOr($id);
+        if(!$indicator){
+            return Response::json(["message"=>"Not Found ."],404);
+        }
+        $request ->validate([
+            'vulnerability' => 'string|sometimes|max:255',
+            'severity'=> 'in:critical,high,medium,low',
+            'site'=>'string|sometimes|max:255',
+            'count'=> 'sometimes|numeric|min:0',
+        ]);
+
+        $indicator->update($request->all());
+
+        return Response::json(["message"=>"Indicator updated successfully ."],201);
     }
 
     /**
@@ -62,11 +82,10 @@ class IndicatorController extends Controller
     {
         $indicator=Indicator::find($id);
         if(!$indicator){
-            return Response::json("Not Found .",404);
+            return Response::json(["message"=>"Not Found ."],404);
         }
         $indicator->delete();       
-        return response([
-            'message' => 'Indicator deleted successfully'
-        ]);
+        return Response::json(["message"=>"Indicator deleted successfully . "],404);
+
     }
 }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('gender',['male','female'])->nullable();            
             $table->char('country',2)->nullable();
             $table->char('locale',2)->default('en');
+            $table->uuid('api_token');
             $table->timestamps();
             $table->primary('user_id');
         });

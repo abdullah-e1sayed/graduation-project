@@ -18,17 +18,18 @@ class DataImport implements ToCollection
         $user=Auth::user();
 
         foreach ($rows as $row) {
+            if (empty($row[0])) {
+                break;
+             }
             // Create the vulnerability record
             $subject = Vulnerability::Create(
                 [
                     'user_id' => $user->id,               
                     'site' => $row[0],
                     'title' => $row[1],
-                    'type' => $row[2],
-                    'poc' => $row[3],
-                    'step_for_reduce' => $row[4],
-                    'report' => $row[5],
-                    'count' => $row[6],
+                    'severity' => $row[2],
+                    'report' => $row[3],
+                    
                 ]
             );
         }

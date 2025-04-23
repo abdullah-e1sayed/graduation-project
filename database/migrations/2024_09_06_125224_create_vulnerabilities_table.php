@@ -16,11 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->string('site');
             $table->string('title');
-            $table->enum('type',['critical','high','medium','low'])->nuulable();
-            $table->text('poc')->nullable();
-            $table->text('step_for_reduce')->nullable();
+            $table->enum('severity',['critical','high','medium','low'])->nuulable();
+            // $table->text('poc')->nullable();
+            // $table->text('step_for_reduce')->nullable();
             $table->text('report')->nullable();
-            $table->integer('count')->default(0);
+            // $table->integer('count')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

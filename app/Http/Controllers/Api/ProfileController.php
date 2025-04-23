@@ -23,7 +23,9 @@ class ProfileController extends Controller
     {
         $user=Auth::user();
         if(Admin::where('email','=',$user->email)->first()){
-            $users = User::Filter($request->query())->paginate();
+            $users = User::Filter($request->query())
+            ->orderBy('id', 'desc') 
+            ->paginate();
             return ProfileResource::collection($users);
         }
     }
@@ -41,15 +43,20 @@ class ProfileController extends Controller
     public function update(Request $request)
     {
         $request -> validate([
-            'phone_number'=>'sometimes|required|string|max:255',
-            'first_name'=>'sometimes|required|string|max:255',
-            'last_name'=>'sometimes|required|string|max:255',
-            'birthday'=>'sometimes|required|date_format:Y-m-d',
-            'gender'=>'in:male,female',
-            'country'=>'sometimes|required|string|size:2',
-            'locale'=>'sometimes|required|string|size:2',            
+            'phone_number'=>'nullable|string|max:255',
+            'first_name'=>'nullable|string|max:255',
+            'name'=>'nullable|string|max:255',
+            'last_name'=>'nullable|string|max:255',
+            'birthday'=>'nullable|date_format:Y-m-d',
+            'gender'=>'nullable|in:male,female',
+            'country'=>'nullable|string|size:2',
+            'locale'=>'nullable|string|size:2',            
         ]);
-        $user=Auth::user();        
+        $user=Auth::user();     
+        if(Admin::where('email','=',$user->email)->first()){
+            $user->update($request->all());
+            return Response::json("Admin Profile Edited successfully .",201);
+        }   
         $profile=Profile::where('user_id',$user->id)->first();
         if(!$user){
             return Response::json("Not Found .",404);

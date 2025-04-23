@@ -14,6 +14,15 @@ class IndicatorResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return [
+            'id'=> $this->id,            
+            'vulnerability'=> $this->vulnerability,
+            'severity'=> $this->severity,
+            'site'=> $this->site,
+            'count'=> $this->count,
+            'created at'=> $this->created_at,
+            'updated at'=> $this->updated_at,
+             
+        ];
     }
 }

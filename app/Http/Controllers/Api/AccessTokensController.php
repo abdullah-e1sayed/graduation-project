@@ -23,7 +23,7 @@ class AccessTokensController extends Controller
             'password' => 'required|string|min:6',
             'device_name' => 'string|max:255',
         ]);
-        
+
         $user = $this->authenticate($request);
 
         if ($user && Hash::check($request->password, $user->password)){
@@ -32,19 +32,19 @@ class AccessTokensController extends Controller
             return Response::json([
                 'token'=> $token->plainTextToken,
                 'user' =>$user,
-            ],201); 
+            ],201);
         }
         return Response::json([
             'message'=> 'Invalid credentials',
         ],401);
-        
+
     }
-    
+
     public function destroy($token = null)
     {
         $user = Auth::guard('sanctum')->user();
 
-        //revoke all tokens 
+        //revoke all tokens
         // $user->tokens()->delete();
 
         if($token === null){
@@ -53,11 +53,11 @@ class AccessTokensController extends Controller
         }
 
         // $PersonalAccessToken = PersonalAccessToken::findToken($token);
-        // if($user->id == $PersonalAccessToken->tokenable_id 
+        // if($user->id == $PersonalAccessToken->tokenable_id
         // && get_class($user) == $PersonalAccessToken->tokenable_type){
         //     $PersonalAccessToken->delete();
         // }
-        
+
     }
 
     public function authenticate($request)
@@ -66,7 +66,7 @@ class AccessTokensController extends Controller
         $password = $request->post('password');
         if($request->is('*/admin/*')){
             $user = Admin::where('email','=',$username)
-            ->orWhere('phone_number','=',$username)                    
+            ->orWhere('phone_number','=',$username)
             ->first();
             if($user && Hash::check($password, $user->password)){
                 return $user;
@@ -74,25 +74,17 @@ class AccessTokensController extends Controller
             return false;
         }
         $user = User::where('email','=',$username)
-                    ->orWhere('phone_number','=',$username)                    
+                    ->orWhere('phone_number','=',$username)
                     ->first();
                     if($user && Hash::check($password, $user->password)){
                         return $user;
                     }
                     return false;
-        
+
     }
-    public function CreateAccount()//????????????????????????????????????????
-    {
-        User::create([
-            'name'=>'admin',
-            'email'=>'admin@gmail.com',
-            'password'=>Hash::make('password'),
-            'phone_number'=>'01234567890',
-        ]);
-    }
+
     public function register(Request $request)
-    {        
+    {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class,'unique:'.Admin::class],
@@ -106,13 +98,13 @@ class AccessTokensController extends Controller
             'phone_number'=>$request->phone_number,
             'password' => Hash::make($request->password),
         ]);
-        return response()->json(['Message'=>'Account created successfully']);        
+        return response()->json(['Message'=>'Account created successfully']);
     }
 
     public function createAdmin(Request $request)
-    {    
+    {
         if($request->is('*/admin/*')){
-            
+
             if(Admin::where('email','=',Auth::user()->email)->first()){
                 $request->validate([
                     'name' => ['required', 'string', 'max:255'],
@@ -127,10 +119,10 @@ class AccessTokensController extends Controller
                     'phone_number'=>$request->phone_number,
                     'password' => Hash::make($request->password),
                 ]);
-                return response()->json(['Message'=>'Admin created successfully']);
+                return response()->json(['Message'=>'Admin created successfully'],201);
             }
-            return response()->json(["Message"=>"you don't have permesion"]);
-        }        
+            return response()->json(["Message"=>"you don't have permesion"],403);
+        }
     }
 
 }

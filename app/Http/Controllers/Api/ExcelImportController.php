@@ -13,7 +13,7 @@ class ExcelImportController extends Controller
     {
         // Validate the uploaded file
         $request->validate([
-            'file' => 'required|mimes:xlsx,xls,csv|max:2048',
+            'file' => 'required|mimes:xlsx,xls|max:2048',
         ]);
 
         // Import the data
